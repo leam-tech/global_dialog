@@ -27,7 +27,6 @@ class GlobalDialog extends StatefulWidget {
   }) {
     GlobalDialog.of(context).showMessage(
       context,
-      message: true,
       dismissible: dismissible,
       title: title,
       content: content,
@@ -44,7 +43,6 @@ class GlobalDialog extends StatefulWidget {
   }) {
     GlobalDialog.of(context).showPrompt(
       context,
-      prompt: true,
       dismissible: dismissible,
       title: title,
       content: content,
@@ -193,7 +191,6 @@ typedef LoadingFunction = Function(BuildContext context, {bool loading});
 
 typedef MessageFunction = Function(
   BuildContext context, {
-  bool message,
   bool dismissible,
   String title,
   dynamic content,
@@ -202,7 +199,6 @@ typedef MessageFunction = Function(
 
 typedef PromptFunction = Function(
   BuildContext context, {
-  bool prompt,
   bool dismissible,
   String title,
   dynamic content,
