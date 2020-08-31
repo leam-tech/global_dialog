@@ -1,8 +1,11 @@
 library global_dialog;
 
-import 'dart:ui' as ui;
-
 import 'package:flutter/material.dart';
+
+import 'dialog_container.dart';
+import 'loading.dart';
+import 'message.dart';
+import 'prompt.dart';
 
 class GlobalDialog extends StatefulWidget {
   static GlobalDialogData of(BuildContext context) {
@@ -46,6 +49,7 @@ class GlobalDialog extends StatefulWidget {
       title: title,
       content: content,
       actions: actions,
+    );
   }
 
   const GlobalDialog({Key key, this.child}) : super(key: key);
@@ -227,174 +231,5 @@ class GlobalDialogData extends InheritedWidget {
     return oldWidget.showLoading != showLoading ||
         oldWidget.showMessage != showMessage ||
         oldWidget.showPrompt != showPrompt;
-  }
-}
-
-class DialogContainer extends StatelessWidget {
-  final ThemeData theme;
-  final Builder child;
-
-  DialogContainer(this.theme, this.child);
-
-  @override
-  Widget build(BuildContext context) {
-    return ClipRect(
-      child: BackdropFilter(
-        filter: ui.ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-        child: Builder(
-          builder: (BuildContext context) {
-            return theme != null ? Theme(data: theme, child: child) : child;
-          },
-        ),
-      ),
-    );
-  }
-}
-
-class LoadingDialog extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return ClipRect(
-      child: BackdropFilter(
-        filter: ui.ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-        child: AlertDialog(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          contentPadding: EdgeInsets.all(0.0),
-          shape: RoundedRectangleBorder(
-              side: BorderSide(
-                style: BorderStyle.none,
-              ),
-              borderRadius: BorderRadius.circular(15)),
-          content: Center(
-            child: CircularProgressIndicator(
-              backgroundColor: Theme.of(context).primaryColor,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class MessageDialog extends StatelessWidget {
-  final String title;
-  final dynamic content;
-  final dynamic button;
-  final bool dismissible;
-
-  MessageDialog(this.title, this.content, this.button, this.dismissible);
-
-  @override
-  Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () => Future.value(dismissible),
-      child: ClipRect(
-        child: BackdropFilter(
-          filter: ui.ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-          child: AlertDialog(
-            backgroundColor: Colors.white,
-            contentPadding: EdgeInsets.all(0.0),
-            shape: RoundedRectangleBorder(
-                side: BorderSide(
-                  style: BorderStyle.none,
-                ),
-                borderRadius: BorderRadius.circular(15)),
-            title: Text(
-              title,
-              style: Theme.of(context).textTheme.subtitle1,
-            ),
-            content: content is Widget
-                ? content
-                : content is String
-                    ? Padding(
-                        padding: EdgeInsets.all(24),
-                        child: Text(
-                          content,
-                          style: Theme.of(context).textTheme.bodyText1,
-                        ),
-                      )
-                    : Container(),
-            actions: [
-              button is Widget
-                  ? button
-                  : FlatButton(
-                      child: Text(
-                        button is String ? button : 'Ok',
-                        style: TextStyle(color: Theme.of(context).primaryColor),
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class PromptDialog extends StatelessWidget {
-  final String title;
-  final dynamic content;
-  final List<Widget> actions;
-  final bool dismissible;
-
-  PromptDialog(this.title, this.content, this.actions, this.dismissible);
-
-  @override
-  Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () => Future.value(dismissible),
-      child: ClipRect(
-        child: BackdropFilter(
-          filter: ui.ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-          child: AlertDialog(
-            backgroundColor: Colors.white,
-            contentPadding: EdgeInsets.all(0.0),
-            shape: RoundedRectangleBorder(
-                side: BorderSide(
-                  style: BorderStyle.none,
-                ),
-                borderRadius: BorderRadius.circular(15)),
-            // Prompt user asking, with actions and such
-            title: Text(title),
-            content: content is Widget
-                ? content
-                : content is String
-                    ? Padding(padding: EdgeInsets.all(24), child: Text(content))
-                    : Container(),
-            actions: actions,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class LoadingOverlay {
-  OverlayEntry _loadingOverlayEntry;
-
-  void show(BuildContext context) {
-    _loadingOverlayEntry = _createdLoadingEntry(context);
-    Overlay.of(context).insert(_loadingOverlayEntry);
-  }
-
-  void hide() {
-    if (_loadingOverlayEntry != null) {
-      _loadingOverlayEntry.remove();
-      _loadingOverlayEntry = null;
-    }
-  }
-
-  OverlayEntry _createdLoadingEntry(BuildContext context) {
-    return OverlayEntry(
-      builder: (BuildContext context) => Stack(
-        children: <Widget>[
-          LoadingDialog(),
-        ],
-      ),
-    );
   }
 }
