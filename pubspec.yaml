@@ -1,7 +1,7 @@
 name: global_dialog
 description: A new Flutter package project.
 version: 0.1.0
-homepage: https://github.com/leam-tech/renovation_core.dart
+homepage: https://github.com/leam-tech/global_dialog.dart
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
