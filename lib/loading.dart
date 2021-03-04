@@ -18,9 +18,7 @@ class Loading extends StatelessWidget {
               ),
               borderRadius: BorderRadius.circular(15)),
           content: Center(
-            child: CircularProgressIndicator(
-              backgroundColor: Theme.of(context).primaryColor,
-            ),
+            child: CircularProgressIndicator(),
           ),
         ),
       ),
