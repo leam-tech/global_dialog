@@ -43,7 +43,7 @@ class MessageDialog extends StatelessWidget {
             actions: [
               button is Widget
                   ? button
-                  : FlatButton(
+                  : TextButton(
                       child: Text(
                         button is String ? button : 'Ok',
                         style: TextStyle(color: Theme.of(context).primaryColor),
