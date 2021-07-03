@@ -8,14 +8,14 @@ import 'message.dart';
 import 'prompt.dart';
 
 class GlobalDialog extends StatefulWidget {
-  static GlobalDialogData of(BuildContext context) {
+  static GlobalDialogData? of(BuildContext context) {
     var globalDialogData =
         context.dependOnInheritedWidgetOfExactType<GlobalDialogData>();
     return globalDialogData;
   }
 
-  static void showLoading(BuildContext context, {@required bool loading}) {
-    GlobalDialog.of(context).showLoading(context, loading: loading);
+  static void showLoading(BuildContext context, {required bool loading}) {
+    GlobalDialog.of(context)!.showLoading(context, loading: loading);
   }
 
   static void showMessage(
@@ -25,7 +25,7 @@ class GlobalDialog extends StatefulWidget {
     dynamic content = '',
     dynamic button,
   }) {
-    GlobalDialog.of(context).showMessage(
+    GlobalDialog.of(context)!.showMessage(
       context,
       dismissible: dismissible,
       title: title,
@@ -39,9 +39,9 @@ class GlobalDialog extends StatefulWidget {
     bool dismissible = false,
     String title = '',
     dynamic content = '',
-    @required List<Widget> actions,
+    required List<Widget> actions,
   }) {
-    GlobalDialog.of(context).showPrompt(
+    GlobalDialog.of(context)!.showPrompt(
       context,
       dismissible: dismissible,
       title: title,
@@ -50,23 +50,23 @@ class GlobalDialog extends StatefulWidget {
     );
   }
 
-  const GlobalDialog({Key key, this.child}) : super(key: key);
+  const GlobalDialog({Key? key, this.child}) : super(key: key);
 
-  final Widget child;
+  final Widget? child;
 
-  static Future<T> dialog<T>(
+  static Future<T?> dialog<T>(
     BuildContext context, {
     bool generic = false,
     bool message = false,
     bool prompt = false,
     bool barrierDismissible = true,
-    WidgetBuilder builder,
-    Color backgroundColor,
-    String title,
+    WidgetBuilder? builder,
+    Color? backgroundColor,
+    String? title,
     dynamic content,
     dynamic button,
-    List<Widget> actions,
-    ThemeData themeData,
+    List<Widget>? actions,
+    ThemeData? themeData,
   }) {
     assert(debugCheckHasMaterialLocalizations(context));
     final ThemeData theme = themeData ?? Theme.of(context);
@@ -74,9 +74,7 @@ class GlobalDialog extends StatefulWidget {
       context: context,
       barrierDismissible: barrierDismissible,
       barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-      barrierColor: backgroundColor != null
-          ? backgroundColor
-          : Colors.black.withOpacity(0.01),
+      barrierColor: backgroundColor ?? Colors.black.withOpacity(0.01),
       transitionDuration: const Duration(milliseconds: 100),
       pageBuilder: (BuildContext buildContext, Animation<double> animation,
           Animation<double> secondaryAnimation) {
@@ -85,7 +83,7 @@ class GlobalDialog extends StatefulWidget {
             return DialogContainer(
               theme,
               Builder(
-                builder: builder,
+                builder: builder!,
               ),
             );
           } else if (message) {
@@ -115,19 +113,19 @@ class GlobalDialog extends StatefulWidget {
 }
 
 class _GlobalDialogState extends State<GlobalDialog> {
-  bool loading;
-  bool message;
-  bool prompt;
+  bool? loading;
+  late bool message;
+  late bool prompt;
 
   LoadingOverlay loadingOverlay = LoadingOverlay();
 
-  void showLoading(BuildContext context, {@required bool loading}) {
+  void showLoading(BuildContext context, {required bool loading}) {
     if (this.loading != loading) {
       message = false;
       prompt = false;
       this.loading = loading;
-      if (this.loading) loadingOverlay.show(context);
-      if (!this.loading) {
+      if (this.loading!) loadingOverlay.show(context);
+      if (!this.loading!) {
         loadingOverlay.hide();
       }
     }
@@ -160,7 +158,7 @@ class _GlobalDialogState extends State<GlobalDialog> {
     bool dismissible = false,
     String title = '',
     dynamic content = '',
-    @required List<Widget> actions,
+    List<Widget>? actions,
   }) {
     loading = false;
     message = false;
@@ -178,7 +176,7 @@ class _GlobalDialogState extends State<GlobalDialog> {
   @override
   Widget build(BuildContext context) {
     return GlobalDialogData(
-      child: widget.child,
+      child: widget.child!,
       showLoading: showLoading,
       showMessage: showMessage,
       showPrompt: showPrompt,
@@ -186,7 +184,8 @@ class _GlobalDialogState extends State<GlobalDialog> {
   }
 }
 
-typedef LoadingFunction = Function(BuildContext context, {bool loading});
+typedef LoadingFunction = void Function(BuildContext context,
+    {required bool loading});
 
 typedef MessageFunction = Function(
   BuildContext context, {
@@ -196,12 +195,12 @@ typedef MessageFunction = Function(
   dynamic button,
 });
 
-typedef PromptFunction = Function(
+typedef PromptFunction = void Function(
   BuildContext context, {
   bool dismissible,
   String title,
   dynamic content,
-  List<Widget> actions,
+  List<Widget>? actions,
 });
 
 class GlobalDialogData extends InheritedWidget {
@@ -210,14 +209,14 @@ class GlobalDialogData extends InheritedWidget {
   final PromptFunction showPrompt;
 
   GlobalDialogData({
-    Key key,
-    this.showLoading,
-    this.showMessage,
-    this.showPrompt,
-    Widget child,
+    Key? key,
+    required this.showLoading,
+    required this.showMessage,
+    required this.showPrompt,
+    required Widget child,
   }) : super(key: key, child: child);
 
-  static GlobalDialogData of(BuildContext context) {
+  static GlobalDialogData? of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<GlobalDialogData>();
   }
 

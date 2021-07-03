@@ -27,16 +27,16 @@ class Loading extends StatelessWidget {
 }
 
 class LoadingOverlay {
-  OverlayEntry _loadingOverlayEntry;
+  OverlayEntry? _loadingOverlayEntry;
 
   void show(BuildContext context) {
     _loadingOverlayEntry = _createdLoadingEntry(context);
-    Overlay.of(context).insert(_loadingOverlayEntry);
+    Overlay.of(context)!.insert(_loadingOverlayEntry!);
   }
 
   void hide() {
     if (_loadingOverlayEntry != null) {
-      _loadingOverlayEntry.remove();
+      _loadingOverlayEntry!.remove();
       _loadingOverlayEntry = null;
     }
   }

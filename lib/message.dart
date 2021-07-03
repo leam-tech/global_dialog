@@ -3,7 +3,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 
 class MessageDialog extends StatelessWidget {
-  final String title;
+  final String? title;
   final dynamic content;
   final dynamic button;
   final bool dismissible;
@@ -26,7 +26,7 @@ class MessageDialog extends StatelessWidget {
                 ),
                 borderRadius: BorderRadius.circular(15)),
             title: Text(
-              title,
+              title!,
               style: Theme.of(context).textTheme.subtitle1,
             ),
             content: content is Widget

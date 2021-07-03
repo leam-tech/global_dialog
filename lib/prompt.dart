@@ -3,9 +3,9 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 
 class PromptDialog extends StatelessWidget {
-  final String title;
+  final String? title;
   final dynamic content;
-  final List<Widget> actions;
+  final List<Widget>? actions;
   final bool dismissible;
 
   PromptDialog(this.title, this.content, this.actions, this.dismissible);
@@ -26,7 +26,7 @@ class PromptDialog extends StatelessWidget {
                 ),
                 borderRadius: BorderRadius.circular(15)),
             // Prompt user asking, with actions and such
-            title: Text(title),
+            title: Text(title!),
             content: content is Widget
                 ? content
                 : content is String
