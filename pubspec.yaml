@@ -1,6 +1,6 @@
 name: global_dialog
 description: A simple package to get you started with dialog interactions from your business logic
-version: 0.2.0
+version: 0.3.0
 homepage: https://github.com/leam-tech/global_dialog
 
 environment:
