@@ -8,6 +8,12 @@ import 'message.dart';
 import 'prompt.dart';
 
 class GlobalDialog extends StatefulWidget {
+  const GlobalDialog({Key? key, required this.child, this.loadingOverlay})
+      : super(key: key);
+
+  final Widget? loadingOverlay;
+  final Widget child;
+
   static GlobalDialogData? of(BuildContext context) {
     var globalDialogData =
         context.dependOnInheritedWidgetOfExactType<GlobalDialogData>();
@@ -49,10 +55,6 @@ class GlobalDialog extends StatefulWidget {
       actions: actions,
     );
   }
-
-  const GlobalDialog({Key? key, this.child}) : super(key: key);
-
-  final Widget? child;
 
   static Future<T?> dialog<T>(
     BuildContext context, {
@@ -117,7 +119,13 @@ class _GlobalDialogState extends State<GlobalDialog> {
   late bool message;
   late bool prompt;
 
-  LoadingOverlay loadingOverlay = LoadingOverlay();
+  late LoadingOverlay loadingOverlay;
+
+  @override
+  void initState() {
+    super.initState();
+    loadingOverlay = LoadingOverlay(loadingUi: widget.loadingOverlay);
+  }
 
   void showLoading(BuildContext context, {required bool loading}) {
     if (this.loading != loading) {
@@ -176,7 +184,7 @@ class _GlobalDialogState extends State<GlobalDialog> {
   @override
   Widget build(BuildContext context) {
     return GlobalDialogData(
-      child: widget.child!,
+      child: widget.child,
       showLoading: showLoading,
       showMessage: showMessage,
       showPrompt: showPrompt,

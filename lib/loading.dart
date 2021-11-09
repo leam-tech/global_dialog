@@ -27,6 +27,10 @@ class Loading extends StatelessWidget {
 }
 
 class LoadingOverlay {
+  LoadingOverlay({this.loadingUi});
+
+  final Widget? loadingUi;
+
   OverlayEntry? _loadingOverlayEntry;
 
   void show(BuildContext context) {
@@ -45,7 +49,7 @@ class LoadingOverlay {
     return OverlayEntry(
       builder: (BuildContext context) => Stack(
         children: <Widget>[
-          Loading(),
+          if (loadingUi != null) loadingUi! else Loading(),
         ],
       ),
     );
