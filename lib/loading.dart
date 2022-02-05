@@ -33,9 +33,10 @@ class LoadingOverlay {
 
   OverlayEntry? _loadingOverlayEntry;
 
-  void show(BuildContext context) {
+  void show(BuildContext context, {required bool isRootOverlay}) {
     _loadingOverlayEntry = _createdLoadingEntry(context);
-    Overlay.of(context)!.insert(_loadingOverlayEntry!);
+    Overlay.of(context, rootOverlay: isRootOverlay)!
+        .insert(_loadingOverlayEntry!);
   }
 
   void hide() {
