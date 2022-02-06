@@ -47,10 +47,8 @@ class LoadingOverlay {
 
   OverlayEntry _createdLoadingEntry(BuildContext context) {
     return OverlayEntry(
-      builder: (BuildContext context) => Stack(
-        children: <Widget>[
-          if (loadingUi != null) loadingUi! else Loading(),
-        ],
+      builder: (BuildContext context) => AbsorbPointer(
+        child: (loadingUi != null) ? loadingUi! : Loading(),
       ),
     );
   }
