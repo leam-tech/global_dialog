@@ -20,8 +20,14 @@ class GlobalDialog extends StatefulWidget {
     return globalDialogData;
   }
 
-  static void showLoading(BuildContext context, {required bool loading}) {
-    GlobalDialog.of(context)!.showLoading(context, loading: loading);
+  static void showLoading(BuildContext context,
+      {required bool loading,
+      bool isRootOverlay = true,
+      bool blockGestures = true}) {
+    GlobalDialog.of(context)!.showLoading(context,
+        loading: loading,
+        isRootOverlay: isRootOverlay,
+        blockGestures: blockGestures);
   }
 
   static void showMessage(
@@ -128,13 +134,16 @@ class _GlobalDialogState extends State<GlobalDialog> {
   }
 
   void showLoading(BuildContext context,
-      {required bool loading, bool isRootOverlay = true}) {
+      {required bool loading,
+      required bool isRootOverlay,
+      required bool blockGestures}) {
     if (this.loading != loading) {
       message = false;
       prompt = false;
       this.loading = loading;
       if (this.loading!)
-        loadingOverlay.show(context, isRootOverlay: isRootOverlay);
+        loadingOverlay.show(context,
+            isRootOverlay: isRootOverlay, blockGestures: blockGestures);
       if (!this.loading!) {
         loadingOverlay.hide();
       }
@@ -195,7 +204,9 @@ class _GlobalDialogState extends State<GlobalDialog> {
 }
 
 typedef LoadingFunction = void Function(BuildContext context,
-    {required bool loading});
+    {required bool loading,
+    required bool isRootOverlay,
+    required bool blockGestures});
 
 typedef MessageFunction = Function(
   BuildContext context, {

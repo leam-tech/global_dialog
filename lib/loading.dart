@@ -33,8 +33,9 @@ class LoadingOverlay {
 
   OverlayEntry? _loadingOverlayEntry;
 
-  void show(BuildContext context, {required bool isRootOverlay}) {
-    _loadingOverlayEntry = _createdLoadingEntry(context);
+  void show(BuildContext context,
+      {required bool isRootOverlay, required bool blockGestures}) {
+    _loadingOverlayEntry = _createdLoadingEntry(context, blockGestures);
     Overlay.of(context, rootOverlay: isRootOverlay)!
         .insert(_loadingOverlayEntry!);
   }
@@ -46,9 +47,10 @@ class LoadingOverlay {
     }
   }
 
-  OverlayEntry _createdLoadingEntry(BuildContext context) {
+  OverlayEntry _createdLoadingEntry(BuildContext context, bool blockGestures) {
     return OverlayEntry(
       builder: (BuildContext context) => AbsorbPointer(
+        absorbing: blockGestures,
         child: (loadingUi != null) ? loadingUi! : Loading(),
       ),
     );
