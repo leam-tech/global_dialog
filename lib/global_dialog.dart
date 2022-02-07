@@ -127,12 +127,14 @@ class _GlobalDialogState extends State<GlobalDialog> {
     loadingOverlay = LoadingOverlay(loadingUi: widget.loadingOverlay);
   }
 
-  void showLoading(BuildContext context, {required bool loading}) {
+  void showLoading(BuildContext context,
+      {required bool loading, bool isRootOverlay = true}) {
     if (this.loading != loading) {
       message = false;
       prompt = false;
       this.loading = loading;
-      if (this.loading!) loadingOverlay.show(context);
+      if (this.loading!)
+        loadingOverlay.show(context, isRootOverlay: isRootOverlay);
       if (!this.loading!) {
         loadingOverlay.hide();
       }
