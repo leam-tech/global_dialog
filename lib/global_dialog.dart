@@ -8,11 +8,16 @@ import 'message.dart';
 import 'prompt.dart';
 
 class GlobalDialog extends StatefulWidget {
-  const GlobalDialog({Key? key, required this.child, this.loadingOverlay})
+  const GlobalDialog(
+      {Key? key,
+      required this.child,
+      this.loadingOverlay,
+      this.blockGestures = true})
       : super(key: key);
 
   final Widget? loadingOverlay;
   final Widget child;
+  final bool? blockGestures;
 
   static GlobalDialogData? of(BuildContext context) {
     var globalDialogData =
@@ -21,13 +26,9 @@ class GlobalDialog extends StatefulWidget {
   }
 
   static void showLoading(BuildContext context,
-      {required bool loading,
-      bool isRootOverlay = true,
-      bool blockGestures = true}) {
-    GlobalDialog.of(context)!.showLoading(context,
-        loading: loading,
-        isRootOverlay: isRootOverlay,
-        blockGestures: blockGestures);
+      {required bool loading, bool isRootOverlay = true}) {
+    GlobalDialog.of(context)!
+        .showLoading(context, loading: loading, isRootOverlay: isRootOverlay);
   }
 
   static void showMessage(
@@ -130,20 +131,21 @@ class _GlobalDialogState extends State<GlobalDialog> {
   @override
   void initState() {
     super.initState();
-    loadingOverlay = LoadingOverlay(loadingUi: widget.loadingOverlay);
+    loadingOverlay = LoadingOverlay(
+        loadingUi: widget.loadingOverlay, blockGestures: widget.blockGestures);
   }
 
-  void showLoading(BuildContext context,
-      {required bool loading,
-      required bool isRootOverlay,
-      required bool blockGestures}) {
+  void showLoading(
+    BuildContext context, {
+    required bool loading,
+    bool? isRootOverlay,
+  }) {
     if (this.loading != loading) {
       message = false;
       prompt = false;
       this.loading = loading;
       if (this.loading!)
-        loadingOverlay.show(context,
-            isRootOverlay: isRootOverlay, blockGestures: blockGestures);
+        loadingOverlay.show(context, isRootOverlay: isRootOverlay);
       if (!this.loading!) {
         loadingOverlay.hide();
       }
@@ -204,9 +206,7 @@ class _GlobalDialogState extends State<GlobalDialog> {
 }
 
 typedef LoadingFunction = void Function(BuildContext context,
-    {required bool loading,
-    required bool isRootOverlay,
-    required bool blockGestures});
+    {required bool loading, bool? isRootOverlay});
 
 typedef MessageFunction = Function(
   BuildContext context, {
