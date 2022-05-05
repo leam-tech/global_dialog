@@ -27,15 +27,16 @@ class Loading extends StatelessWidget {
 }
 
 class LoadingOverlay {
-  LoadingOverlay({this.loadingUi});
+  LoadingOverlay({this.loadingUi, this.blockGestures});
 
   final Widget? loadingUi;
 
   OverlayEntry? _loadingOverlayEntry;
+  final bool? blockGestures;
 
-  void show(BuildContext context, {required bool isRootOverlay}) {
+  void show(BuildContext context, {bool? isRootOverlay}) {
     _loadingOverlayEntry = _createdLoadingEntry(context);
-    Overlay.of(context, rootOverlay: isRootOverlay)!
+    Overlay.of(context, rootOverlay: isRootOverlay ?? false)!
         .insert(_loadingOverlayEntry!);
   }
 
@@ -48,10 +49,9 @@ class LoadingOverlay {
 
   OverlayEntry _createdLoadingEntry(BuildContext context) {
     return OverlayEntry(
-      builder: (BuildContext context) => Stack(
-        children: <Widget>[
-          if (loadingUi != null) loadingUi! else Loading(),
-        ],
+      builder: (BuildContext context) => AbsorbPointer(
+        absorbing: blockGestures ?? true,
+        child: (loadingUi != null) ? loadingUi! : Loading(),
       ),
     );
   }
