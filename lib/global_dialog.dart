@@ -39,7 +39,6 @@ class GlobalDialog extends StatefulWidget {
     String title = '',
     dynamic content = '',
     dynamic button,
-    bool hasBlurBackground = true,
   }) {
     GlobalDialog.of(context)!.showMessage(
       context,
@@ -56,7 +55,6 @@ class GlobalDialog extends StatefulWidget {
     String title = '',
     dynamic content = '',
     required List<Widget> actions,
-    bool hasBlurBackground = true,
   }) {
     GlobalDialog.of(context)!.showPrompt(
       context,
