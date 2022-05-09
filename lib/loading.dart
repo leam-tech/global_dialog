@@ -3,33 +3,40 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 
 class Loading extends StatelessWidget {
+  final bool hasBlurBackground;
+  Loading(this.hasBlurBackground, {Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return ClipRect(
-      child: BackdropFilter(
-        filter: ui.ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-        child: AlertDialog(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          contentPadding: EdgeInsets.all(0.0),
-          shape: RoundedRectangleBorder(
-              side: BorderSide(
-                style: BorderStyle.none,
-              ),
-              borderRadius: BorderRadius.circular(15)),
-          content: Center(
-            child: CircularProgressIndicator(),
+    final child = AlertDialog(
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      contentPadding: EdgeInsets.all(0.0),
+      shape: RoundedRectangleBorder(
+          side: BorderSide(
+            style: BorderStyle.none,
           ),
-        ),
+          borderRadius: BorderRadius.circular(15)),
+      content: Center(
+        child: CircularProgressIndicator(),
       ),
     );
+    return hasBlurBackground
+        ? ClipRect(
+            child: BackdropFilter(
+              filter: ui.ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+              child: child,
+            ),
+          )
+        : child;
   }
 }
 
 class LoadingOverlay {
-  LoadingOverlay({this.loadingUi, this.blockGestures});
+  LoadingOverlay({this.loadingUi, this.blockGestures, this.hasBlurBackground});
 
   final Widget? loadingUi;
+  final bool? hasBlurBackground;
 
   OverlayEntry? _loadingOverlayEntry;
   final bool? blockGestures;
@@ -51,7 +58,9 @@ class LoadingOverlay {
     return OverlayEntry(
       builder: (BuildContext context) => AbsorbPointer(
         absorbing: blockGestures ?? true,
-        child: (loadingUi != null) ? loadingUi! : Loading(),
+        child: (loadingUi != null)
+            ? loadingUi!
+            : Loading(hasBlurBackground ?? true),
       ),
     );
   }

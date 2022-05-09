@@ -12,11 +12,13 @@ class GlobalDialog extends StatefulWidget {
       {Key? key,
       required this.child,
       this.loadingOverlay,
-      this.blockGestures = true})
+      this.blockGestures = true,
+      this.hasBlurBackground = true})
       : super(key: key);
 
   final Widget? loadingOverlay;
   final Widget child;
+  final bool hasBlurBackground;
   final bool? blockGestures;
 
   static GlobalDialogData? of(BuildContext context) {
@@ -37,6 +39,7 @@ class GlobalDialog extends StatefulWidget {
     String title = '',
     dynamic content = '',
     dynamic button,
+    bool hasBlurBackground = true,
   }) {
     GlobalDialog.of(context)!.showMessage(
       context,
@@ -53,6 +56,7 @@ class GlobalDialog extends StatefulWidget {
     String title = '',
     dynamic content = '',
     required List<Widget> actions,
+    bool hasBlurBackground = true,
   }) {
     GlobalDialog.of(context)!.showPrompt(
       context,
@@ -76,6 +80,7 @@ class GlobalDialog extends StatefulWidget {
     dynamic button,
     List<Widget>? actions,
     ThemeData? themeData,
+    bool hasBlurBackground = true,
   }) {
     assert(debugCheckHasMaterialLocalizations(context));
     final ThemeData theme = themeData ?? Theme.of(context);
@@ -94,6 +99,7 @@ class GlobalDialog extends StatefulWidget {
               Builder(
                 builder: builder!,
               ),
+              hasBlurBackground,
             );
           } else if (message) {
             return MessageDialog(
@@ -101,6 +107,7 @@ class GlobalDialog extends StatefulWidget {
               content,
               button,
               barrierDismissible,
+              hasBlurBackground,
             );
           } else if (prompt) {
             return PromptDialog(
@@ -108,6 +115,7 @@ class GlobalDialog extends StatefulWidget {
               content,
               actions,
               barrierDismissible,
+              hasBlurBackground,
             );
           } else {
             return Container();
@@ -132,7 +140,9 @@ class _GlobalDialogState extends State<GlobalDialog> {
   void initState() {
     super.initState();
     loadingOverlay = LoadingOverlay(
-        loadingUi: widget.loadingOverlay, blockGestures: widget.blockGestures);
+        loadingUi: widget.loadingOverlay,
+        blockGestures: widget.blockGestures,
+        hasBlurBackground: widget.hasBlurBackground);
   }
 
   void showLoading(
@@ -163,14 +173,13 @@ class _GlobalDialogState extends State<GlobalDialog> {
     prompt = false;
     this.message = true;
     if (this.message) {
-      GlobalDialog.dialog<void>(
-        context,
-        message: true,
-        barrierDismissible: dismissible,
-        title: title,
-        content: content,
-        button: button,
-      );
+      GlobalDialog.dialog<void>(context,
+          message: true,
+          barrierDismissible: dismissible,
+          title: title,
+          content: content,
+          button: button,
+          hasBlurBackground: widget.hasBlurBackground);
     }
   }
 
@@ -185,12 +194,15 @@ class _GlobalDialogState extends State<GlobalDialog> {
     message = false;
     this.prompt = true;
     if (this.prompt) {
-      GlobalDialog.dialog<void>(context,
-          prompt: true,
-          title: title,
-          content: content,
-          barrierDismissible: dismissible,
-          actions: actions);
+      GlobalDialog.dialog<void>(
+        context,
+        prompt: true,
+        title: title,
+        content: content,
+        barrierDismissible: dismissible,
+        actions: actions,
+        hasBlurBackground: widget.hasBlurBackground,
+      );
     }
   }
 
