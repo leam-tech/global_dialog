@@ -86,7 +86,11 @@ class GlobalDialog extends StatefulWidget {
       context: context,
       barrierDismissible: barrierDismissible,
       barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-      barrierColor: backgroundColor ?? Colors.black.withOpacity(0.01),
+      barrierColor: backgroundColor != null
+          ? backgroundColor
+          : hasBlurBackground
+              ? Colors.black.withOpacity(0.01)
+              : Colors.black.withOpacity(0.5),
       transitionDuration: const Duration(milliseconds: 100),
       pageBuilder: (BuildContext buildContext, Animation<double> animation,
           Animation<double> secondaryAnimation) {
