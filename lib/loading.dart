@@ -3,8 +3,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 
 class Loading extends StatelessWidget {
-  final bool hasBlurBackground;
-  Loading(this.hasBlurBackground, {Key? key}) : super(key: key);
+  Loading({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,22 +20,22 @@ class Loading extends StatelessWidget {
         child: CircularProgressIndicator(),
       ),
     );
-    return hasBlurBackground
-        ? ClipRect(
-            child: BackdropFilter(
-              filter: ui.ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-              child: child,
-            ),
-          )
-        : child;
+    return ClipRect(
+      child: BackdropFilter(
+        filter: ui.ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+        child: child,
+      ),
+    );
   }
 }
 
 class LoadingOverlay {
-  LoadingOverlay({this.loadingUi, this.blockGestures, this.hasBlurBackground});
+  LoadingOverlay({
+    this.loadingUi,
+    this.blockGestures,
+  });
 
   final Widget? loadingUi;
-  final bool? hasBlurBackground;
 
   OverlayEntry? _loadingOverlayEntry;
   final bool? blockGestures;
@@ -58,9 +57,7 @@ class LoadingOverlay {
     return OverlayEntry(
       builder: (BuildContext context) => AbsorbPointer(
         absorbing: blockGestures ?? true,
-        child: (loadingUi != null)
-            ? loadingUi!
-            : Loading(hasBlurBackground ?? true),
+        child: (loadingUi != null) ? loadingUi! : Loading(),
       ),
     );
   }

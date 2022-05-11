@@ -145,9 +145,9 @@ class _GlobalDialogState extends State<GlobalDialog> {
   void initState() {
     super.initState();
     loadingOverlay = LoadingOverlay(
-        loadingUi: widget.loadingOverlay,
-        blockGestures: widget.blockGestures,
-        hasBlurBackground: widget.hasBlurBackground);
+      loadingUi: widget.loadingOverlay,
+      blockGestures: widget.blockGestures,
+    );
   }
 
   void showLoading(
