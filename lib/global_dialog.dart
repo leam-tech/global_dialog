@@ -72,6 +72,7 @@ class GlobalDialog extends StatefulWidget {
     bool prompt = false,
     bool barrierDismissible = true,
     WidgetBuilder? builder,
+    Widget? child,
     Color? backgroundColor,
     String? title,
     dynamic content,
@@ -79,8 +80,10 @@ class GlobalDialog extends StatefulWidget {
     List<Widget>? actions,
     ThemeData? themeData,
     bool hasBlurBackground = true,
+    BackgroundBuilder? backgroundBuilder,
   }) {
     assert(debugCheckHasMaterialLocalizations(context));
+    assert(child != null || builder != null);
     final ThemeData theme = themeData ?? Theme.of(context);
     return showGeneralDialog(
       context: context,
@@ -98,10 +101,10 @@ class GlobalDialog extends StatefulWidget {
           if (generic) {
             return DialogContainer(
               theme,
-              Builder(
+              child: child,
+              builder: Builder(
                 builder: builder!,
               ),
-              hasBlurBackground,
             );
           } else if (message) {
             return MessageDialog(
@@ -237,6 +240,7 @@ typedef PromptFunction = void Function(
   dynamic content,
   List<Widget>? actions,
 });
+typedef BackgroundBuilder = Widget Function(BuildContext context, Widget child);
 
 class GlobalDialogData extends InheritedWidget {
   final LoadingFunction showLoading;
