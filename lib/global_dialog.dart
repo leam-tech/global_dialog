@@ -83,7 +83,6 @@ class GlobalDialog extends StatefulWidget {
     BackgroundBuilder? backgroundBuilder,
   }) {
     assert(debugCheckHasMaterialLocalizations(context));
-    assert(child != null || builder != null);
     final ThemeData theme = themeData ?? Theme.of(context);
     return showGeneralDialog(
       context: context,
