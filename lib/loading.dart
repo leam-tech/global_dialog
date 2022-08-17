@@ -42,6 +42,7 @@ class LoadingOverlay {
 
   void show(BuildContext context, {bool? isRootOverlay}) {
     _loadingOverlayEntry = _createdLoadingEntry(context);
+    FocusManager.instance.primaryFocus?.unfocus();
     Overlay.of(context, rootOverlay: isRootOverlay ?? false)!
         .insert(_loadingOverlayEntry!);
   }
